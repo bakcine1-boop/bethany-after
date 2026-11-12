@@ -128,8 +128,8 @@
     <p class="login-kicker">베다니한인연합감리교회 · 주일 이후</p>
     <h1 class="login-title">기도제목 관리</h1>
     <input type="text" name="username" value="관리자" autocomplete="username" hidden>
-    <label for="pin">관리자 PIN (숫자 6자리)</label>
-    <input class="pin-input" id="pin" name="password" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="current-password" required>
+    <label for="pin">관리자 PIN (숫자 4자리)</label>
+    <input class="pin-input" id="pin" name="password" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" required>
     <button class="btn-primary" id="loginBtn" type="submit">들어가기</button>
     <p class="login-msg" id="loginMsg" role="alert"></p>
     <p class="login-note">성도님들이 보낸 기도제목을 보는 화면입니다. 이 주소와 PIN은 목사님만 알고 계셔 주세요.</p>
@@ -206,7 +206,7 @@
   }
 
   /* ---------- 로그인 ---------- */
-  $('pin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); });
+  $('pin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); });
 
   $('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
