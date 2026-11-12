@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>기도제목 관리 · 주일 이후 | 베다니한인연합감리교회</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1f2a44;
+    --navy-2: #2c3a5c;
+    --cream: #f7f3ec;
+    --card: #fffdf9;
+    --line: #e6dfd3;
+    --ink: #262b38;
+    --muted: #6b6f7a;
+    --orange: #e8622c;
+    --orange-soft: #fdeee6;
+    --green: #2f7a55;
+    --green-soft: #e7f3ec;
+    --blue: #2f5f9a;
+    --blue-soft: #e8eff8;
+    --danger: #b3412b;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    font-size: 17px; line-height: 1.6; word-break: keep-all; overflow-wrap: anywhere;
+  }
+  [hidden] { display: none !important; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 48px; }
+
+  /* 로그인 */
+  .login { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; background: var(--navy); }
+  .login-card { width: 100%; max-width: 380px; background: var(--card); border-radius: 18px; padding: 32px 24px 28px; }
+  .login-kicker { font-size: 14px; color: var(--muted); margin: 0 0 6px; }
+  .login-title { font-size: 26px; font-weight: 700; color: var(--navy); margin: 0 0 22px; letter-spacing: -0.02em; }
+  .login label { display: block; font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .pin-input {
+    width: 100%; height: 60px; border: 2px solid var(--line); border-radius: 12px; background: #fff;
+    font-size: 28px; letter-spacing: 0.4em; text-align: center; padding: 0 12px;
+  }
+  .pin-input:focus { outline: none; border-color: var(--navy); }
+  .btn-primary {
+    width: 100%; height: 56px; margin-top: 14px; border: 0; border-radius: 12px;
+    background: var(--orange); color: #fff; font-size: 18px; font-weight: 700;
+  }
+  .btn-primary:disabled { opacity: .6; }
+  .login-msg { min-height: 26px; margin: 12px 0 0; font-size: 16px; color: var(--danger); }
+  .login-note { margin: 18px 0 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+  /* 상단 */
+  .top { background: var(--navy); color: #fff; }
+  .top-inner { max-width: 720px; margin: 0 auto; padding: 18px 16px 16px; display: flex; align-items: center; gap: 10px; }
+  .top-title { flex: 1; min-width: 0; }
+  .top-title small { display: block; font-size: 13px; color: rgba(255,255,255,.7); }
+  .top-title strong { display: block; font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+  .top-btn { height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; font-size: 15px; white-space: nowrap; }
+
+  /* 주간 선택과 요약 */
+  .week { margin: 18px 0 12px; }
+  .week label { display: block; font-size: 15px; color: var(--muted); margin-bottom: 6px; }
+  .week select { width: 100%; height: 54px; border: 2px solid var(--line); border-radius: 12px; background: #fff; padding: 0 14px; font-size: 18px; font-weight: 500; }
+  .summary { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .sum-row { display: flex; gap: 10px; }
+  .sum-box { flex: 1; border-radius: 10px; background: var(--cream); padding: 10px 12px; }
+  .sum-box.hot { background: var(--orange-soft); }
+  .sum-label { font-size: 14px; color: var(--muted); }
+  .sum-num { font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .sum-box.hot .sum-num { color: var(--orange); }
+  .sum-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .sum-cat { font-size: 15px; padding: 4px 12px; border-radius: 999px; background: var(--cream); color: var(--ink); }
+  .sum-cat b { color: var(--navy); margin-left: 4px; }
+  .sum-cat.zero { color: #a3a6ad; }
+  .sum-cat.zero b { color: #a3a6ad; }
+  .tools { display: flex; gap: 10px; margin: 12px 0 4px; }
+  .tool-btn { flex: 1; height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); font-size: 15px; color: var(--navy); }
+
+  /* 카드 */
+  .list { margin-top: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 14px; }
+  .card.contact { border: 2px solid var(--orange); background: #fffaf6; }
+  .card-flag { display: inline-block; font-size: 14px; font-weight: 700; color: #fff; background: var(--orange); border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; }
+  .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 14px; color: var(--muted); }
+  .status-tag { font-size: 13px; font-weight: 700; padding: 2px 9px; border-radius: 6px; }
+  .status-tag.prayed { background: var(--green-soft); color: var(--green); }
+  .status-tag.called { background: var(--blue-soft); color: var(--blue); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+  .chip { font-size: 15px; padding: 3px 11px; border-radius: 999px; background: #efe9de; color: var(--navy); }
+  .text { margin: 10px 0 0; font-size: 18px; white-space: pre-wrap; }
+  .text.empty { color: var(--muted); font-size: 16px; }
+  .who { margin-top: 12px; padding: 12px; border-radius: 10px; background: var(--orange-soft); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .who-name { font-weight: 700; font-size: 17px; }
+  .who-phone { font-size: 17px; }
+  .call { display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border-radius: 10px; background: var(--orange); color: #fff; font-weight: 700; text-decoration: none; font-size: 16px; }
+  .actions { display: flex; gap: 8px; margin-top: 14px; }
+  .act { flex: 1; min-height: 48px; border-radius: 10px; border: 2px solid var(--line); background: #fff; font-size: 16px; font-weight: 500; color: var(--navy); }
+  .act.on.pray { background: var(--green); border-color: var(--green); color: #fff; }
+  .act.on.call-done { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .act:disabled { opacity: .6; }
+  .memo { margin-top: 12px; }
+  .memo label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+  .memo textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 16px; background: #fff; resize: vertical; }
+  .memo-state { font-size: 13px; color: var(--muted); min-height: 18px; margin-top: 2px; }
+  .card-foot { display: flex; justify-content: flex-end; margin-top: 4px; }
+  .del { border: 0; background: transparent; color: var(--danger); font-size: 15px; padding: 8px 4px; text-decoration: underline; }
+  .empty-state { text-align: center; color: var(--muted); padding: 36px 12px; background: var(--card); border: 1px dashed var(--line); border-radius: 14px; }
+  .banner { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #fbe9e5; color: var(--danger); font-size: 15px; }
+  .foot-note { margin: 28px 0 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 15px; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { opacity: 1; }
+  .loading { text-align: center; color: var(--muted); padding: 32px 0; }
+</style>
+</head>
+<body>
+
+<!-- 로그인 -->
+<section class="login" id="loginView">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <p class="login-kicker">베다니한인연합감리교회 · 주일 이후</p>
+    <h1 class="login-title">기도제목 관리</h1>
+    <input type="text" name="username" value="관리자" autocomplete="username" hidden>
+    <label for="pin">관리자 PIN (숫자 6자리)</label>
+    <input class="pin-input" id="pin" name="password" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="current-password" required>
+    <button class="btn-primary" id="loginBtn" type="submit">들어가기</button>
+    <p class="login-msg" id="loginMsg" role="alert"></p>
+    <p class="login-note">성도님들이 보낸 기도제목을 보는 화면입니다. 이 주소와 PIN은 목사님만 알고 계셔 주세요.</p>
+  </form>
+</section>
+
+<!-- 관리 화면 -->
+<div id="appView" hidden>
+  <header class="top">
+    <div class="top-inner">
+      <div class="top-title"><small>베다니 · 주일 이후</small><strong>기도제목 관리</strong></div>
+      <button class="top-btn" id="refreshBtn" type="button">새로고침</button>
+      <button class="top-btn" id="logoutBtn" type="button">로그아웃</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="week">
+      <label for="weekSel">설교 주일</label>
+      <select id="weekSel"></select>
+    </div>
+    <section class="summary" id="summary"></section>
+    <div class="tools">
+      <button class="tool-btn" id="csvBtn" type="button">이 주 목록 내려받기 (CSV)</button>
+    </div>
+    <div class="banner" id="banner" hidden></div>
+    <div class="list" id="list"><p class="loading">불러오는 중입니다…</p></div>
+    <p class="foot-note">시간은 미국 동부 시간입니다. 기도제목은 비공개 구글 시트에만 저장되고, 이 화면은 검색에 나타나지 않습니다. 연락을 원하신 분은 맨 위에 주황색으로 표시됩니다.</p>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwV0eFA7HI_Ktq_4puoD3CWPM9-3OcW6ea2ZYQ46lNceUAhfAUiZxN5igCuBBGda_vCGA/exec';
+  const CATEGORIES = ['건강·치유', '가정·자녀', '직장·사업', '영적 성장', '관계 회복', '감사·찬양'];
+  const PIN_KEY = 'bethanyAfterAdminPin';
+  const TZ = 'America/New_York';
+
+  const $ = (id) => document.getElementById(id);
+  let state = { items: [], weeks: [], week: '' };
+
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = text; // 성도가 쓴 글은 항상 글자로만 넣습니다
+    return e;
+  }
+
+  async function api(body) {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function errorText(code) {
+    if (code === 'pin') return 'PIN이 맞지 않습니다. 다시 입력해 주세요.';
+    if (code === 'locked') return '여러 번 틀려서 10분 동안 잠겼습니다. 잠시 후 다시 시도해 주세요.';
+    if (code === 'not_ready') return '서버에 PIN이 아직 설정되지 않았습니다.';
+    if (code === 'busy') return '서버가 바쁩니다. 잠시 후 다시 시도해 주세요.';
+    return '연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.';
+  }
+
+  /* ---------- 로그인 ---------- */
+  $('pin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); });
+
+  $('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pin = $('pin').value.trim();
+    if (!/^\d{4,8}$/.test(pin)) { $('loginMsg').textContent = 'PIN 숫자를 입력해 주세요.'; return; }
+    $('loginBtn').disabled = true; $('loginBtn').textContent = '확인 중…'; $('loginMsg').textContent = '';
+    try {
+      const r = await api({ action: 'list', pin });
+      if (!r.ok) { $('loginMsg').textContent = errorText(r.error); return; }
+      sessionStorage.setItem(PIN_KEY, pin);
+      $('pin').value = '';
+      showApp(r);
+    } catch (err) {
+      $('loginMsg').textContent = errorText('network');
+    } finally {
+      $('loginBtn').disabled = false; $('loginBtn').textContent = '들어가기';
+    }
+  });
+
+  function logout() {
+    sessionStorage.removeItem(PIN_KEY);
+    state = { items: [], weeks: [], week: '' };
+    $('list').replaceChildren();
+    $('appView').hidden = true;
+    $('loginView').hidden = false;
+    $('pin').focus();
+  }
+  $('logoutBtn').addEventListener('click', logout);
+
+  /* ---------- 불러오기 ---------- */
+  function showApp(r) {
+    $('loginView').hidden = true;
+    $('appView').hidden = false;
+    applyData(r);
+  }
+
+  function applyData(r) {
+    state.items = r.items || [];
+    state.weeks = r.weeks || [];
+    if (!state.week || (state.week !== 'all' && !state.weeks.some(w => w.sermon_date === state.week))) {
+      state.week = state.weeks.length ? state.weeks[0].sermon_date : 'all';
+    }
+    renderWeeks();
+    render();
+  }
+
+  async function reload(silent) {
+    const pin = sessionStorage.getItem(PIN_KEY);
+    if (!pin) return logout();
+    try {
+      const r = await api({ action: 'list', pin });
+      if (!r.ok) {
+        if (r.error === 'pin' || r.error === 'locked') { logout(); $('loginMsg').textContent = errorText(r.error); return; }
+        showBanner(errorText(r.error)); return;
+      }
+      hideBanner();
+      applyData(r);
+      if (!silent) toast('새로 불러왔습니다');
+    } catch (err) {
+      showBanner(errorText('network'));
+    }
+  }
+  $('refreshBtn').addEventListener('click', () => reload(false));
+
+  function showBanner(msg) { $('banner').textContent = msg; $('banner').hidden = false; }
+  function hideBanner() { $('banner').hidden = true; }
+
+  /* ---------- 날짜 표시 ---------- */
+  function sermonLabel(d) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || '');
+    if (!m) return d || '날짜 없음';
+    return Number(m[1]) + '년 ' + Number(m[2]) + '월 ' + Number(m[3]) + '일 설교';
+  }
+  const tsFmt = new Intl.DateTimeFormat('ko-KR', { timeZone: TZ, month: 'long', day: 'numeric', weekday: 'short', hour: 'numeric', minute: '2-digit' });
+  function tsLabel(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return iso || '';
+    return tsFmt.format(d) + ' (미국 동부)';
+  }
+
+  /* ---------- 화면 그리기 ---------- */
+  function renderWeeks() {
+    const sel = $('weekSel');
+    sel.replaceChildren();
+    state.weeks.forEach(w => {
+      const o = el('option', '', sermonLabel(w.sermon_date) + ' · ' + w.count + '건');
+      o.value = w.sermon_date;
+      sel.appendChild(o);
+    });
+    const all = el('option', '', '전체 보기 · ' + state.items.length + '건');
+    all.value = 'all';
+    sel.appendChild(all);
+    sel.value = state.week;
+  }
+  $('weekSel').addEventListener('change', (e) => { state.week = e.target.value; render(); window.scrollTo({ top: 0 }); });
+
+  function currentItems() {
+    const list = state.week === 'all' ? state.items.slice() : state.items.filter(i => i.sermon_date === state.week);
+    // 연락 원함을 맨 위로, 그다음 최신순
+    return list.sort((a, b) => (b.contact_wanted - a.contact_wanted) || (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : 0));
+  }
+
+  function render() {
+    const items = currentItems();
+    renderSummary(items);
+    const list = $('list');
+    list.replaceChildren();
+    if (!items.length) {
+      list.appendChild(el('p', 'empty-state', state.weeks.length ? '이 주에는 아직 받은 기도제목이 없습니다.' : '아직 받은 기도제목이 없습니다.'));
+      return;
+    }
+    items.forEach(it => list.appendChild(card(it)));
+  }
+
+  function renderSummary(items) {
+    const box = $('summary');
+    box.replaceChildren();
+    const row = el('div', 'sum-row');
+    const total = el('div', 'sum-box');
+    total.append(el('div', 'sum-label', '받은 기도제목'), el('div', 'sum-num', items.length + '건'));
+    const hot = el('div', 'sum-box hot');
+    hot.append(el('div', 'sum-label', '연락 원함'), el('div', 'sum-num', items.filter(i => i.contact_wanted).length + '건'));
+    const done = el('div', 'sum-box');
+    done.append(el('div', 'sum-label', '기도·연락 완료'), el('div', 'sum-num', items.filter(i => i.status).length + '건'));
+    row.append(total, hot, done);
+    const cats = el('div', 'sum-cats');
+    CATEGORIES.forEach(c => {
+      const n = items.filter(i => (i.categories || []).includes(c)).length;
+      const s = el('span', 'sum-cat' + (n ? '' : ' zero'), c);
+      s.appendChild(el('b', '', String(n)));
+      cats.appendChild(s);
+    });
+    box.append(row, cats);
+  }
+
+  function telHref(phone) {
+    const digits = String(phone || '').replace(/[^\d+]/g, '');
+    return digits.replace(/\D/g, '').length >= 7 ? 'tel:' + digits : '';
+  }
+
+  function card(it) {
+    const c = el('article', 'card' + (it.contact_wanted ? ' contact' : ''));
+    c.dataset.id = it.id;
+    if (it.contact_wanted) c.appendChild(el('span', 'card-flag', '목사님 연락 원함'));
+
+    const meta = el('div', 'card-meta');
+    meta.appendChild(el('span', '', tsLabel(it.ts)));
+    if (state.week === 'all') meta.appendChild(el('span', '', '· ' + sermonLabel(it.sermon_date)));
+    if (it.status === '기도함') meta.appendChild(el('span', 'status-tag prayed', '기도함'));
+    if (it.status === '연락함') meta.appendChild(el('span', 'status-tag called', '연락함'));
+    c.appendChild(meta);
+
+    if ((it.categories || []).length) {
+      const chips = el('div', 'chips');
+      it.categories.forEach(cat => chips.appendChild(el('span', 'chip', cat)));
+      c.appendChild(chips);
+    }
+
+    if (it.text) c.appendChild(el('p', 'text', it.text));
+    else c.appendChild(el('p', 'text empty', '주제만 선택했습니다'));
+
+    if (it.contact_wanted && (it.name || it.phone)) {
+      const who = el('div', 'who');
+      if (it.name) who.appendChild(el('span', 'who-name', it.name));
+      if (it.phone) who.appendChild(el('span', 'who-phone', it.phone));
+      const href = telHref(it.phone);
+      if (href) { const a = el('a', 'call', '전화 걸기'); a.href = href; who.appendChild(a); }
+      c.appendChild(who);
+    }
+
+    const acts = el('div', 'actions');
+    const pray = el('button', 'act pray' + (it.status === '기도함' ? ' on' : ''), it.status === '기도함' ? '기도했어요' : '기도했어요');
+    pray.type = 'button';
+    pray.addEventListener('click', () => setStatus(it, it.status === '기도함' ? '' : '기도함', [pray, call]));
+    acts.appendChild(pray);
+    let call = null;
+    if (it.contact_wanted) {
+      call = el('button', 'act call-done' + (it.status === '연락함' ? ' on' : ''), it.status === '연락함' ? '연락했어요' : '연락했어요');
+      call.type = 'button';
+      call.addEventListener('click', () => setStatus(it, it.status === '연락함' ? '' : '연락함', [pray, call]));
+      acts.appendChild(call);
+    }
+    c.appendChild(acts);
+
+    const memo = el('div', 'memo');
+    const mid = 'memo-' + it.id;
+    const lab = el('label', '', '메모 (목사님만 보는 메모)');
+    lab.htmlFor = mid;
+    const ta = el('textarea');
+    ta.id = mid; ta.maxLength = 1000; ta.value = it.memo || ''; ta.rows = 2;
+    const ms = el('div', 'memo-state');
+    ta.addEventListener('blur', () => saveMemo(it, ta, ms));
+    memo.append(lab, ta, ms);
+    c.appendChild(memo);
+
+    const foot = el('div', 'card-foot');
+    const del = el('button', 'del', '삭제');
+    del.type = 'button';
+    del.addEventListener('click', () => remove(it, del));
+    foot.appendChild(del);
+    c.appendChild(foot);
+    return c;
+  }
+
+  /* ---------- 고치기 ---------- */
+  async function adminCall(body) {
+    const pin = sessionStorage.getItem(PIN_KEY);
+    if (!pin) { logout(); throw new Error('nopin'); }
+    const r = await api(Object.assign({ pin }, body));
+    if (!r.ok && (r.error === 'pin' || r.error === 'locked')) { logout(); $('loginMsg').textContent = errorText(r.error); }
+    return r;
+  }
+
+  async function setStatus(it, status, btns) {
+    btns.forEach(b => b && (b.disabled = true));
+    try {
+      const r = await adminCall({ action: 'update', id: it.id, status });
+      if (!r.ok) { toast(r.error === 'not_found' ? '이미 삭제된 기도제목입니다' : errorText(r.error)); if (r.error === 'not_found') reload(true); return; }
+      it.status = r.item.status;
+      render();
+      toast(status === '' ? '표시를 지웠습니다' : (status === '기도함' ? '기도했어요로 표시했습니다' : '연락했어요로 표시했습니다'));
+    } catch (err) {
+      toast(errorText('network'));
+    } finally {
+      btns.forEach(b => b && (b.disabled = false));
+    }
+  }
+
+  async function saveMemo(it, ta, ms) {
+    const v = ta.value.trim();
+    if (v === (it.memo || '')) return;
+    ms.textContent = '저장 중…';
+    try {
+      const r = await adminCall({ action: 'update', id: it.id, memo: v });
+      if (!r.ok) { ms.textContent = '저장하지 못했습니다. 다시 시도해 주세요.'; return; }
+      it.memo = r.item.memo;
+      ms.textContent = '저장됨';
+      setTimeout(() => { if (ms.textContent === '저장됨') ms.textContent = ''; }, 2500);
+    } catch (err) {
+      ms.textContent = '저장하지 못했습니다. 연결을 확인해 주세요.';
+    }
+  }
+
+  async function remove(it, btn) {
+    if (!confirm('이 기도제목을 삭제할까요?\n삭제하면 되돌릴 수 없습니다.')) return;
+    btn.disabled = true;
+    try {
+      const r = await adminCall({ action: 'delete', id: it.id });
+      if (!r.ok && r.error !== 'not_found') { toast(errorText(r.error)); return; }
+      state.items = state.items.filter(x => x.id !== it.id);
+      const w = state.weeks.find(x => x.sermon_date === it.sermon_date);
+      if (w) { w.count -= 1; if (w.count <= 0) state.weeks = state.weeks.filter(x => x !== w); }
+      if (state.week !== 'all' && !state.weeks.some(x => x.sermon_date === state.week)) state.week = state.weeks.length ? state.weeks[0].sermon_date : 'all';
+      renderWeeks();
+      render();
+      toast('삭제했습니다');
+    } catch (err) {
+      toast(errorText('network'));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  /* ---------- CSV ---------- */
+  function csvCell(v) {
+    let s = String(v == null ? '' : v);
+    if (/^[=+\-@]/.test(s)) s = "'" + s; // 엑셀에서 수식으로 실행되지 않게
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  $('csvBtn').addEventListener('click', () => {
+    const items = currentItems();
+    if (!items.length) { toast('내려받을 기도제목이 없습니다'); return; }
+    const head = ['접수시각(미국 동부)', '설교일', '주제', '기도제목', '연락원함', '이름', '연락처', '상태', '메모'];
+    const lines = [head.map(csvCell).join(',')];
+    items.forEach(i => lines.push([
+      tsLabel(i.ts).replace(' (미국 동부)', ''), i.sermon_date, (i.categories || []).join(', '), i.text,
+      i.contact_wanted ? '예' : '', i.name, i.phone, i.status, i.memo
+    ].map(csvCell).join(',')));
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '주일이후_기도제목_' + (state.week === 'all' ? '전체' : state.week) + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+
+  /* ---------- 시작 ---------- */
+  (async function init() {
+    const pin = sessionStorage.getItem(PIN_KEY);
+    if (!pin) { $('pin').focus(); return; }
+    $('loginView').hidden = true;
+    $('appView').hidden = false;
+    await reload(true);
+  })();
+</script>
+</body>
+</html>
