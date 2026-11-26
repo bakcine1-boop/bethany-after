@@ -116,7 +116,8 @@
   .yt-play span { width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center; }
   .yt-play svg { width:24px; height:24px; fill:var(--ink); margin-left:3px; }
   .song { margin-top:10px; font-weight:700; }
-  .pod { margin-top:34px; padding-top:28px; border-top:1px solid var(--line); }
+  .shorts { margin-top:30px; }
+  .pod { margin-top:30px; padding-top:26px; border-top:1px solid var(--line); }
   .srow { display:grid; grid-template-columns:76px 1fr; gap:14px; align-items:center; text-decoration:none; padding:10px 0; border-top:1px solid var(--line); }
   .srow[hidden] { display:none; }
   .srow .th { aspect-ratio:9/16; border-radius:6px; background:#000 center/cover no-repeat; }
@@ -247,15 +248,20 @@
 <section class="media" id="praise"><div class="wrap">
   <p class="label">이번 주 함께 배울 찬양</p>
   <h2>주의 자녀로 산다는 것은</h2>
-  <div class="yt" id="praiseYt" data-id="h_Dswc8-y0c" style="background-image:url('https://i.ytimg.com/vi/h_Dswc8-y0c/hqdefault.jpg')">
+  <div class="yt" id="praiseYt" data-id="7JtbTUlBsYo" style="background-image:url('https://i.ytimg.com/vi/7JtbTUlBsYo/maxresdefault.jpg')">
     <button class="yt-play" type="button" aria-label="찬양 영상 재생"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
   </div>
-  <p class="song">GIFTED · 가사 영상 5분 30초</p>
-  <p class="muted">다니엘 3:18 “그렇게 하지 아니하실지라도”의 고백을 담은 찬양입니다. 작사·작곡 이오늘</p>
+  <p class="song">수영로교회 R3 Worship 라이브 · 5분 14초</p>
+  <p class="muted">화면에 가사가 함께 나옵니다. 다니엘 3:18 “그렇게 하지 아니하실지라도”의 고백을 담은 찬양입니다. 원곡 GIFTED, 작사·작곡 이오늘</p>
 
+  <div class="shorts">
+    <p class="label">1분 쇼츠</p>
+    <a class="srow" href="https://www.youtube.com/shorts/pBhz_IHWGSA" target="_blank" rel="noopener"><div class="th" style="background-image:url('https://i.ytimg.com/vi/pBhz_IHWGSA/oar2.jpg')"></div><div><b>기도해 드리고 나온 지 20분 만에 들려온 소식</b><span>1분 25초</span></div></a>
+    <a class="srow" id="short2" data-from="2026-11-26T22:00:00Z" href="https://www.youtube.com/shorts/Dwpl6GEy3Ok" target="_blank" rel="noopener" hidden><div class="th" style="background-image:url('1122-s2.jpg')"></div><div><b>아무것도 없을 때도 기뻐할 수 있는 이유</b><span>1분 25초</span></div></a>
+  </div>
   <div class="pod">
     <p class="label">주일 이후 팟캐스트</p>
-    <div class="yt" id="podYt" data-id="SXDN31cNFZU" style="background-image:url('https://i.ytimg.com/vi/SXDN31cNFZU/maxresdefault.jpg')">
+    <div class="yt" id="podYt" data-id="LRr0_ax678I" style="background-image:url('1122-ep13.jpg')">
       <button class="yt-play" type="button" aria-label="팟캐스트 재생"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
     </div>
     <p class="song">EP.13 당연하게 누리던 것이 내일 사라진다면?</p>
@@ -309,7 +315,7 @@
   var PREV_SERMON_DATE = '2026-11-15';
   var PAGE_URL = 'https://bakcine1-boop.github.io/bethany-after/1122.html';
   var SERMON = { id: 'DUot_7DiBNA', title: '은혜를 기억하는 사람 · 설교' };
-  var PODCAST = { id: 'SXDN31cNFZU', title: '주일 이후 EP.13 · 팟캐스트' };
+  var PODCAST = { id: 'LRr0_ax678I', title: '주일 이후 EP.13 · 팟캐스트' };
   /* 자막 끄기(cc_load_policy=0), 주석 숨김, 관련 영상은 같은 채널만 */
   var YT_Q = '?autoplay=1&rel=0&playsinline=1&cc_load_policy=0&iv_load_policy=3&hl=ko';
 
@@ -342,6 +348,8 @@
   document.querySelectorAll('[data-zoom]').forEach(function (img) { img.addEventListener('click', function () { lb.querySelector('img').src = img.src; lb.querySelector('img').alt = img.alt; lb.classList.add('on'); }); });
   lb.addEventListener('click', function () { lb.classList.remove('on'); });
 
+
+  document.querySelectorAll('[data-from]').forEach(function (el) { if (Date.now() >= Date.parse(el.getAttribute('data-from'))) el.hidden = false; });
 
   function share(data, copyText) {
     if (navigator.share) { navigator.share(data).catch(function () {}); return; }
