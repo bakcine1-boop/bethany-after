@@ -317,7 +317,7 @@
   var SERMON = { id: 'DUot_7DiBNA', title: '은혜를 기억하는 사람 · 설교' };
   var PODCAST = { id: 'LRr0_ax678I', title: '주일 이후 EP.13 · 팟캐스트' };
   /* 자막 끄기(cc_load_policy=0), 주석 숨김, 관련 영상은 같은 채널만 */
-  var YT_Q = '?autoplay=1&rel=0&playsinline=1&cc_load_policy=0&iv_load_policy=3&hl=ko&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
+  var YT_Q = '?autoplay=1&rel=0&playsinline=1&cc_load_policy=0&iv_load_policy=3&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
 
   function $(id) { return document.getElementById(id); }
   function toast(t) { var el = $('toast'); el.textContent = t; el.classList.add('on'); setTimeout(function () { el.classList.remove('on'); }, 2400); }
@@ -335,7 +335,7 @@
   function hook(id) {
     var go = function () {
       var p = new YT.Player(id, { events: {
-        onReady: function () { noCaptions(p); },
+        onReady: function () { noCaptions(p); var n = 0; var iv = setInterval(function () { noCaptions(p); if (++n > 20) clearInterval(iv); }, 1000); },
         onApiChange: function () { noCaptions(p); },
         onStateChange: function (e) { if (e.data === 1) noCaptions(p); }
       } });
