@@ -116,7 +116,13 @@
   .yt-play span { width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center; }
   .yt-play svg { width:24px; height:24px; fill:var(--ink); margin-left:3px; }
   .song { margin-top:10px; font-weight:700; }
-  .shorts { margin-top:30px; }
+  .shorts { margin-top:32px; }
+  .srow3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px; }
+  .sc { display:block; text-decoration:none; }
+  .sc[hidden] { display:none; }
+  .sc .th { position:relative; aspect-ratio:9/16; border-radius:8px; background:#000 center/cover no-repeat; overflow:hidden; }
+  .sc .th span { position:absolute; left:6px; bottom:6px; font-size:.66em; font-weight:700; color:#fff; background:rgba(0,0,0,.6); border-radius:4px; padding:1px 6px; }
+  .sc p { font-size:.78em; line-height:1.45; margin-top:6px; color:var(--ink); }
   .pod { margin-top:30px; padding-top:26px; border-top:1px solid var(--line); }
   .srow { display:grid; grid-template-columns:76px 1fr; gap:14px; align-items:center; text-decoration:none; padding:10px 0; border-top:1px solid var(--line); }
   .srow[hidden] { display:none; }
@@ -255,19 +261,13 @@
   <p class="muted">화면에 가사가 함께 나옵니다. 다니엘 3:18 “그렇게 하지 아니하실지라도”의 고백을 담은 찬양입니다. 원곡 GIFTED, 작사·작곡 이오늘</p>
 
   <div class="shorts">
-    <p class="label">1분 쇼츠</p>
-    <a class="srow" href="https://www.youtube.com/shorts/pBhz_IHWGSA" target="_blank" rel="noopener"><div class="th" style="background-image:url('https://i.ytimg.com/vi/pBhz_IHWGSA/oar2.jpg')"></div><div><b>기도해 드리고 나온 지 20분 만에 들려온 소식</b><span>1분 25초</span></div></a>
-    <a class="srow" id="short2" data-from="2026-11-26T22:00:00Z" href="https://www.youtube.com/shorts/Dwpl6GEy3Ok" target="_blank" rel="noopener" hidden><div class="th" style="background-image:url('1122-s2.jpg')"></div><div><b>아무것도 없을 때도 기뻐할 수 있는 이유</b><span>1분 25초</span></div></a>
-  </div>
-  <div class="pod">
-    <p class="label">주일 이후 팟캐스트</p>
-    <div class="yt" id="podYt" data-id="LRr0_ax678I" style="background-image:url('1122-ep13.jpg')">
-      <button class="yt-play" type="button" aria-label="팟캐스트 재생"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+    <p class="label">1분으로 다시 보기 · 이번 설교 쇼츠</p>
+    <div class="srow3">
+      <a class="sc" href="https://www.youtube.com/shorts/gDmBHCg1C0Q" target="_blank" rel="noopener"><div class="th" style="background-image:url('https://i.ytimg.com/vi/gDmBHCg1C0Q/oar2.jpg')"><span>1:15</span></div><p>아홉 명은 놓친 참된 감사의 비밀</p></a>
+      <a class="sc" href="https://www.youtube.com/shorts/pBhz_IHWGSA" target="_blank" rel="noopener"><div class="th" style="background-image:url('https://i.ytimg.com/vi/pBhz_IHWGSA/oar2.jpg')"><span>1:25</span></div><p>기도해 드리고 나온 지 20분 만에 들려온 소식</p></a>
+      <a class="sc" id="short2" data-from="2026-11-26T22:00:00Z" href="https://www.youtube.com/shorts/Dwpl6GEy3Ok" target="_blank" rel="noopener" hidden><div class="th" style="background-image:url('1122-s2.jpg')"><span>1:25</span></div><p>아무것도 없을 때도 기뻐할 수 있는 이유</p></a>
     </div>
-    <p class="song">EP.13 당연하게 누리던 것이 내일 사라진다면?</p>
-    <p class="muted">이번 설교를 두 진행자가 18분 동안 한 걸음 더 나눕니다. 운전하거나 걸으면서 들어 보세요.</p>
   </div>
-</div>
 </div></section>
 
 <section id="news"><div class="wrap">
@@ -317,7 +317,7 @@
   var SERMON = { id: 'DUot_7DiBNA', title: '은혜를 기억하는 사람 · 설교' };
   var PODCAST = { id: 'LRr0_ax678I', title: '주일 이후 EP.13 · 팟캐스트' };
   /* 자막 끄기(cc_load_policy=0), 주석 숨김, 관련 영상은 같은 채널만 */
-  var YT_Q = '?autoplay=1&rel=0&playsinline=1&cc_load_policy=0&iv_load_policy=3&hl=ko';
+  var YT_Q = '?autoplay=1&rel=0&playsinline=1&cc_load_policy=0&iv_load_policy=3&hl=ko&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
 
   function $(id) { return document.getElementById(id); }
   function toast(t) { var el = $('toast'); el.textContent = t; el.classList.add('on'); setTimeout(function () { el.classList.remove('on'); }, 2400); }
@@ -327,7 +327,22 @@
   try { applyFont(localStorage.getItem('ja_font') === 'big'); } catch (e) {}
   fontBtn.addEventListener('click', function () { var big = !document.documentElement.classList.contains('big'); applyFont(big); try { localStorage.setItem('ja_font', big ? 'big' : 'normal'); } catch (e) {} });
 
-  function frame(id, title) { return '<iframe src="https://www.youtube.com/embed/' + id + YT_Q + '" title="' + title + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'; }
+  /* 페이지 안에서 재생할 때만 유튜브 자막(CC)을 끕니다. 유튜브 원본 영상의 자막은 그대로입니다. */
+  var ytReady = false, ytQueue = [], ytSeq = 0;
+  window.onYouTubeIframeAPIReady = function () { ytReady = true; ytQueue.forEach(function (fn) { fn(); }); ytQueue = []; };
+  (function () { var t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t); })();
+  function noCaptions(p) { try { p.unloadModule('captions'); } catch (e) {} try { p.unloadModule('cc'); } catch (e) {} try { p.setOption('captions', 'track', {}); } catch (e) {} }
+  function hook(id) {
+    var go = function () {
+      var p = new YT.Player(id, { events: {
+        onReady: function () { noCaptions(p); },
+        onApiChange: function () { noCaptions(p); },
+        onStateChange: function (e) { if (e.data === 1) noCaptions(p); }
+      } });
+    };
+    if (ytReady && window.YT && YT.Player) go(); else ytQueue.push(go);
+  }
+  function frame(id, title) { var fid = 'ytf' + (++ytSeq); setTimeout(function () { hook(fid); }, 0); return '<iframe id="' + fid + '" src="https://www.youtube.com/embed/' + id + YT_Q + '" title="' + title + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'; }
   function openPlayer(item) {
     $('playerFrame').innerHTML = frame(item.id, item.title);
     $('playerTitle').textContent = item.title;
@@ -341,8 +356,6 @@
 
   var py = $('praiseYt');
   py.querySelector('.yt-play').addEventListener('click', function () { py.innerHTML = frame(py.getAttribute('data-id'), '이번 주 찬양'); });
-  var pd = $('podYt');
-  pd.querySelector('.yt-play').addEventListener('click', function () { pd.innerHTML = frame(pd.getAttribute('data-id'), '주일 이후 EP.13'); });
 
   var lb = $('lightbox');
   document.querySelectorAll('[data-zoom]').forEach(function (img) { img.addEventListener('click', function () { lb.querySelector('img').src = img.src; lb.querySelector('img').alt = img.alt; lb.classList.add('on'); }); });
